@@ -10,7 +10,7 @@
 
 		<copy todir="E:\AAPACHE TOMCAT\webapps" flatten="true">  
 			<resources>
-				<file file="warfile/siemens.war"/>    
+				<file file="warfile/unifiedReports.war"/>    
 			</resources>  
 		</copy>  
 	</target>    
