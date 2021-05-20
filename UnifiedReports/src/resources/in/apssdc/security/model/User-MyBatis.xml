@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="User">
+
+	<select id="GetUsers" resultType="User">
+		SELECT * FROM config.users
+	</select>
+	
+	<select id="GetUserByCredentials" resultType="User" parameterType="map">
+		SELECT username,password,roleid FROM public.users WHERE username = #{p.username} AND password = md5(#{p.password});
+	</select>     
+	      
+	<update id="updateToken" parameterType="map">
+	UPDATE public.users
+      SET fcmtoken=#{p.fcmToken}  
+      WHERE username=#{p.username};            
+	</update>      
+	
+	<select id="verifyToken" parameterType="map" resultType="java.lang.String">
+		SELECT fcmtoken as fcmToken FROM public.users WHERE username=#{p.username}
+	</select>
+   
+</mapper>

@@ -1,0 +1,52 @@
+<div id="uploadDiv" data-ng-controller="subscribeController"
+	class="form-group row">
+	<div class="col-md-4"></div>
+	<div class=" col-md-4">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<label>Upload documents</label>
+			</div>
+			<div class="panel-body">
+				<!-- <p><label style="color: red;">Note:*</label>&nbsp; Compressed file formats are not allowed (Ex:- zip, rar etc...)</p> -->
+				<div class="form-group row">
+					<div class="col-md-1"></div>
+					<div class="col-md-8">
+						<label class="control-label">Aadhaar ID</label> <input type="text"
+							class="form-control" data-ng-model="data.object.aadhaarId"
+							id="aadhaarId" maxlength="12"
+							data-ng-blur="checkStudent(data.object.aadhaarId);">
+					</div>
+					<div class="col-md-1"></div>
+				</div>
+				<div class="form-group row documentDiv">
+					<div class="col-md-1"></div>
+					<div class="col-md-10">
+						<label class="control-label">Upload documents</label> <input
+							type="file" data-ng-model="data.object.document"
+							onchange="angular.element(this).scope().uploadFiles(this);"
+							multiple="multiple">
+					</div>
+					<div class="col-md-1"></div>
+				</div>  
+				<div class="form-group row documentDiv">
+					<div class="text-center">
+						<button type="button" class="btn btn-success"
+							data-ng-click="saveDocuments(data.object);">Save</button>
+					</div>
+				</div>
+				<div>
+					<div class="text-center">
+						<span id="msgDiv"></span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-4"></div>
+</div>
+<script>
+	jQuery(document).ready(function() {
+		$("#msgDiv").hide();
+		angular.bootstrap(jQuery("#uploadDiv"), [ 'subscribeModule' ]);
+	});
+</script>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Login">
+    
+    <insert id="Add" parameterType="map">
+		INSERT INTO public.logins
+		(userName, context, logTime)
+		VALUES (#{p.userName}, #{p.context},   
+		current_timestamp)      
+	</insert>   
+
+    <delete id="Delete" parameterType="map">
+        delete from public.logins where username = #{p.userName}
+    </delete>  
+    
+	<select id="GetDetails" resultType="Employee" parameterType="map">   
+		Select * from public.employee where email = #{p.username};	
+	</select>
+	
+	<select id="GetColleges" resultType="Colleges" parameterType="map">
+		SELECT collegeid, collegename,latitude,longitude 
+		FROM public.colleges_mst where collegeid = #{collegeid};	
+	</select> 
+
+	<select id="GetLoginByUserContext" resultType="Login"
+		parameterType="map">
+		SELECT userName,context FROM public.logins WHERE userName = #{p.userName}
+		AND context = #{p.context}
+	</select>
+     
+	<insert id="Reg" parameterType="map">
+		INSERT INTO register (name,
+		password, phno)
+		VALUES (#{p.name}, #{p.password}, #{p.phno})
+	</insert>
+	   
+   <select id="DeviceVerify" parameterType="map" resultType="java.lang.String">
+	SELECT deviceid as deviceId
+    FROM public.users where username=#{p.userName}
+	</select>
+	
+	<update id="updateDeviceId" parameterType="map">
+	    UPDATE public.users
+        SET deviceid=#{p.deviceId}      
+        WHERE username=#{p.userName}
+	</update>
+	
+	<update id="UpdateEmpBankDetails" parameterType="map">
+	UPDATE employee.employee
+    SET accountnumber=#{p.accountNumber}, bankname=#{p.bankName},ifsccode=#{p.ifscCode}
+    WHERE traineeid=#{p.traineeid};
+	</update>
+	
+	<update id="updateEmpDetails" parameterType="map">
+	UPDATE employee.employee
+    SET gender=#{p.gender}, dob=#{p.dob},mobile=#{p.mobile},guardianname=#{p.guardianName}, 
+       aadharid=#{p.aadharId}
+    WHERE traineeid=#{p.traineeid};
+	</update>
+	
+</mapper>

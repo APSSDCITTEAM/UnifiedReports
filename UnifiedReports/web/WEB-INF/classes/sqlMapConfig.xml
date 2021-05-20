@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>	<typeAliases>		<typeAlias alias="Hackathon" type="in.apssdc.model.Hackathon" />		<typeAlias alias="College" type="in.apssdc.model.College" />		<typeAlias alias="StudentSubscribeModal" type="in.apssdc.model.StudentSubscribeModal" />
+		<typeAlias alias="Login" type="in.apssdc.model.Login" />
+    	<typeAlias alias="Colleges" type="in.apssdc.model.Colleges" />
+    	<typeAlias alias="User" type="in.apssdc.model.User" />
+		<typeAlias alias="Employee" type="in.apssdc.model.Employee" />	</typeAliases>	<mappers>				<mapper resource="in/apssdc/security/model/Report-MyBatis.xml" />
+		   
+	<mapper resource="in/apssdc/security/model/Login-MyBatis.xml" />  
+    	<mapper resource="in/apssdc/security/model/User-MyBatis.xml" />	</mappers></configuration>

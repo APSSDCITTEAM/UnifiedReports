@@ -1,0 +1,74 @@
+<html>
+<head>
+<title>Unified Reports</title>
+
+<!-- Bootstrap core CSS -->
+<link href="/andromeda/css/bootstrap/bootstrap.min.css" rel="stylesheet"/>
+<link href="/andromeda/css/bootstrap/bootstrap-theme.min.css" rel="stylesheet"/>    
+<link href="/andromeda/css/bootstrap/jquery-ui.css" rel="stylesheet"/>
+<link href="/andromeda/css/general/andromeda.css" rel="stylesheet"/>   
+   
+<!-- Core Java scripts -->        
+<script src="/andromeda/scripts/lib/jquery-2.1.1.js"></script>           
+<!-- <script src="/training/scripts/lib/dirPagination.js"></script> -->
+<script src="/andromeda/scripts/lib/bootstrap.min.js"></script>
+<script src="/andromeda/scripts/lib/angular/angular.js"></script>          
+<script src="/andromeda/scripts/lib/jquery-ui.min.js"></script>
+<script src="scripts/lib/datepicker/jquery-ui.js"></script>   
+<script src="/unifiedReports/scripts/lib/angular-ui.min.js"></script>    
+<script src="scripts/lib/jquery.prettyPhoto.js"></script>  
+<script type="text/javascript" src="/careers/html/general/MapFiles/angular-sanitize.min.js"></script>
+<script type="text/javascript" src="/careers/html/general/MapFiles/ng-map.js"></script>
+<script type="text/javascript" src="/careers/html/general/MapFiles/map.js"></script>  
+<script src="/andromeda/scripts/lib/FileSaver.js"></script>
+	<script src="/unifiedReports/scripts/general/xlsx-model.js"></script>   
+	<script src="/unifiedReports/scripts/lib/xlsx.full.min.js"></script>   
+
+<link href="/unifiedReports/css/general/960.css" rel="stylesheet"/>
+<link href="/unifiedReports/css/general/defaultTheme.css" rel="stylesheet"/>
+<link href="/unifiedReports/css/general/headers.css" rel="stylesheet"/>
+<link href="/unifiedReports/css/general/myTheme.css" rel="stylesheet"/>
+<link href="/unifiedReports/css/general/style.css" rel="stylesheet"/>
+
+<link rel="stylesheet"  href="/unifiedReports/css/lib/font-awesome.min.css"/>
+<link rel="stylesheet"  href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.min.css">
+<!-- Andromeda scripts -->
+<script src="/unifiedReports/scripts/common/Andromeda.js"></script>
+<script src="/unifiedReports/scripts/common/menuActions.js"></script>   
+
+<script src="/unifiedReports/scripts/common/sweetalert-dev.js"></script>
+<link rel="stylesheet" href="css/general/sweetalert.css"/>    
+
+      
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBQQ0r0ujFb0ME4nz2Yg4PHUm0xiqNYXME&libraries=places&sensor=false"></script>
+    
+  
+<link rel="shortcut icon" type="image/x-icon" href="/unifiedReports/web/images/apssdc_final.png"/>
+   
+   
+<script src="scripts/general/loginHomeModule.js"></script>
+<script src="scripts/general/formModule.js"></script> 
+<script src="scripts/general/districtschemewiseReportModule.js"></script>
+<script src="scripts/general/districtschemeTCTPwiseReportModule.js"></script>
+<script src="scripts/general/districtschemesectorwiseReportModule.js"></script>
+<script src="scripts/general/districtschemegenderwiseReportModule.js"></script>
+<script src="scripts/general/districtschemegendercategorywiseReportModule.js"></script>
+<script src="scripts/general/degreecollegewiseReportModule.js"></script>
+<script src="scripts/general/applicantsReport.js"></script>
+<script src="scripts/general/placedReport.js"></script>
+
+
+
+</head>    
+<body id="indexDiv">
+	<script type="text/javascript">                     
+	jQuery(document).ready(function() {      
+		if (Andromeda.isUserLoggedIn()) {       
+			Andromeda.showLoginHome();    
+		} else {             
+			Andromeda.showHomePage();
+		}
+	});
+	</script>    
+</body>
+</html>

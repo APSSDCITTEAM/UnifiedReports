@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<script type="text/javascript" src="/unifiedReports/scripts/general/districtschemeTCTPwiseReportModule.js"></script>  
+        
+<style>     
+#constituencyDiv1 {
+	width: 80%;   
+	margin-left: 10%;      
+}  
+
+a {
+	cursor: pointer;
+}
+
+.glyphicon {   
+	line-height: 1.8;   
+}
+
+.glyphicon-refresh-animate {   
+   -animation: spin .7s infinite linear;
+   -ms-animation: spin .7s infinite linear;
+   -webkit-animation: spinw .7s infinite linear;
+   -moz-animation: spinm .7s infinite linear;
+}
+
+#studentTableDiv {
+	height: 600px;  
+	overflow: scroll;
+}
+
+
+@keyframes spin {
+    from { transform: scale(1) rotate(0deg);}   
+    to { transform: scale(1) rotate(360deg);}
+}
+  
+@-webkit-keyframes spinw {
+    from { -webkit-transform: rotate(0deg);}
+    to { -webkit-transform: rotate(360deg);}
+}
+
+@-moz-keyframes spinm {
+    from { -moz-transform: rotate(0deg);}
+    to { -moz-transform: rotate(360deg);}
+}
+</style>
+<br>
+	<div class="container" id="controllerDiv"  
+		data-ng-controller="FormController">	
+		
+
+		<div id="CompanyWiseDiv">   
+			<div class="text-center">
+				<h4 style="font-size: large;">District - Scheme -TC-TP Wise Report</h4>
+			</div>
+			   
+			<table class="table table-bordered">
+				<thead style="background-color: #F5F5F5; color: #333">
+					<tr>
+						<th>S.No.</th>
+						<th>District</th>
+						<th>Financial Year</th>  
+						<th>Scheme Name</th>
+						<th>Program Name</th> 
+						<th>Training Partner Name</th> 
+						<th>Training Center Name</th> 
+						<th>Total</th>
+					</tr>
+					<tr id="companySearchRow">   
+						<th></th>
+						<th><input class="form-control" data-ng-model="search.districtname" /></th>
+						<th><input class="form-control" data-ng-model="search.year" /></th>
+						<th><input class="form-control" data-ng-model="search.schemename" /></th>
+						<th><input class="form-control" data-ng-model="search.programname" /></th>
+						<th><input class="form-control" data-ng-model="search.tpname" /></th>
+						<th><input class="form-control" data-ng-model="search.tcname" /></th>
+						
+						
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>      
+					<tr data-ng-repeat="data in (filteredItems = (districtschemetctpwisecount  | filter : search))">
+						<td align="right">{{$index+1}}</td>
+						<td>{{data.districtname}}</td>
+						<td>{{data.year}}</td>
+						<td><a data-ng-click="getDistrictSchemeTCTPwiseData(data);">{{data.schemename}}</a></td>
+						<td>{{data.programname}}</td>
+						<td>{{data.tpname}}</td>   
+						<td>{{data.tcname}}</td>
+						<td align="right">{{data.count}}</td>         
+					</tr>      
+					           
+				</tbody>                      
+			</table>      
+		</div>       
+    
+
+<div id="placedDetailsDiv">
+
+	<div class="text-center">
+			<label class="bluetxtresource">District - Scheme -TC-TP Wise Report</label>
+			<br/>
+			
+				
+			
+		</div>  
+		
+		<div class="col-md-1 pull-right">        
+					<button type="button" class="btn btn-xs btn-default"
+						data-ng-click="exportToExcel();">
+						<img alt="No image found"
+							src="/andromeda/images/icons/excel-icon.png"
+							style="height: 25px; width: 15px;">
+					</button>
+				</div>            
+				<div class="col-md-1 pull-right">   
+					<button type="button" class="btn btn-xs btn-success" id="searchBtn"
+						data-ng-click="toggleRegisteredStudents();">
+						<span class="glyphicon glyphicon-search"></span>
+					</button>  
+				</div>  
+				
+				<div class="col-md-1 pull-right">  
+					<button type="button" class="btn btn-xs btn-default backBtn2">
+						<span class="glyphicon glyphicon-arrow-left"></span>   
+					</button>
+				</div> 
+				<br>   
+				<br>  
+				<br>  
+	      
+		<table class="table table-bordered">  
+			<thead style="background-color: ghostwhite;">  
+				<tr>
+					<th>S.No.</th>
+					<th>Financial Year</th>
+					<th>District Name</th>
+					<th>First Name</th>
+					<th>Last Name</th>
+					<th>Date of Birth</th>
+					<th>Gender</th>
+					<th>Religion</th>
+					<th>Category</th>
+					<th>Qualification</th>
+					<th>Phone</th>
+					<th>Email</th>
+					<th>Scheme</th>
+					<th>Program</th>
+					<th>Training Center Name</th>
+					<th>Training Partner Name</th>
+					<th>Start Date</th>
+					<th>End Date</th>
+					<th>Batch Name</th>
+					<th>Company Name</th>
+						
+								
+						
+				</tr>    
+				<tr id="registeredStudentsSearchRow">   
+						<th></th>
+						<th><input type="text" class="form-control"
+							data-ng-model="search.year"></th>
+						<th><input type="text" class="form-control"
+							data-ng-model="search.districtname"></th>						
+						<th><input type="text" class="form-control"
+							data-ng-model="search.firstname"></th>
+							<th><input type="text" class="form-control"
+							data-ng-model="search.lastname"></th>
+						<th><input type="text" class="form-control"
+							data-ng-model="search.dob"></th>
+							<th><input type="text" class="form-control"
+							data-ng-model="search.gender"></th>
+						<th><input type="text" class="form-control"   
+							data-ng-model="search.religion"></th>
+						<th><input type="text" class="form-control"
+							data-ng-model="search.category"></th>
+							<th><input type="text" class="form-control"
+							data-ng-model="search.qualification"></th>
+							<th><input type="text" class="form-control"
+							data-ng-model="search.contact"></th>
+							<th><input type="text" class="form-control"
+							data-ng-model="search.email"></th>
+							<th><input type="text" class="form-control"
+							data-ng-model="search.schemename"></th>
+							<th><input type="text" class="form-control"
+							data-ng-model="search.programname"></th>
+							<th><input type="text" class="form-control"
+							data-ng-model="search.tcname"></th>
+							<th><input type="text" class="form-control"
+							data-ng-model="search.tpname"></th>
+							<th><input type="text" class="form-control"
+							data-ng-model="search.startdate"></th>
+							<th><input type="text" class="form-control"
+							data-ng-model="search.enddate"></th>
+							<th><input type="text" class="form-control"
+							data-ng-model="search.batchname"></th>
+							<th><input type="text" class="form-control"
+							data-ng-model="search.name"></th>
+							
+						
+							
+						   
+					</tr>        
+				   
+			</thead>    
+			<tbody id="sdcTB">   
+				<tr
+						data-ng-repeat="data in schemetctpWiseDetails = schemetctpWiseDetails  | filter : search">
+					<td align="right">{{$index+1}}</td>
+						<td>{{data.year}}</td>
+						<td>{{data.districtname}}</td>   
+						<td>{{data.firstname}}</td>
+						<td>{{data.lastname}}</td>
+						<td>{{data.dob}}</td>   
+						<td>{{data.gender}}</td>	
+						<td>{{data.religion}}</td>
+						<td>{{data.category}}</td>   
+						<td>{{data.qualification}}</td>
+						<td>{{data.contact}}</td>   
+						<td>{{data.email}}</td>
+						<td>{{data.schemename}}</td>
+						<td>{{data.programname}}</td>	    
+						<td>{{data.tcname}}</td>
+						<td>{{data.tpname}}</td>   
+						<td>{{data.startdate}}</td>
+						<td>{{data.enddate}}</td>   
+						<td>{{data.batchname}}</td>
+						<td>{{data.name}}</td>	       	   				
+						
+							 					
+					  	   
+				</tr>
+			</tbody>
+		</table>   
+	</div>
+	</div>
+
+
+
+<div id="errorDiv" style="width: 20%; margin-bottom: 3%; color: red;">
+			<div class="text-center">
+				<img src="/unifiedReports/images/no-data-to-show.png" />
+			</div>
+		</div>
+
+    
+
+
+<script>
+	jQuery(document).ready(function() {		
+		
+		
+		
+		$("#errorDiv").hide();
+		$("#clusterWiseDiv").hide();
+		$("#DateApplicantsDiv").hide();
+		$("#placedDetailsDiv").hide();
+
+			
+		$(document).on('click',".backBtn1",function(){
+			$("#centreWiseCourseDiv").show();       
+			$("#coursewiseDiv").hide();
+			$("#DateApplicantsDiv").hide();
+		}); 
+		
+         $(document).on('click',".backBtn2",function(){
+			
+			$("#errorDiv").hide();
+			$("#CompanyWiseDiv").show();
+			$("#placedDetailsDiv").hide(); 
+			
+			
+		});  
+		
+		
+		
+		$(".nav a").on("click", function() {
+			$(".nav").find(".active").removeClass("active");
+			$(this).parent().addClass("active");
+		});
+
+		angular.bootstrap(jQuery("#controllerDiv"), [ 'districtSchemetctpwiseReportModule' ]);
+	});       
+</script>
+</html>

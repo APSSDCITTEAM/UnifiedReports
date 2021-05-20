@@ -1,0 +1,131 @@
+ <style>
+a {
+	cursor: pointer;
+}  
+
+.footer {
+	position: fixed;
+	bottom: 0px;
+	width: 100%;
+	line-height: 45px;
+	background-color: #f5f5f5;
+	border-top: 1px solid #e3e3e3;
+	height: 40px;
+}
+  
+#copyRightId {    
+	color: #504242;
+}    
+
+.glyphicon-refresh-animate {
+    -animation: spin .7s infinite linear;
+    -ms-animation: spin .7s infinite linear;
+    -webkit-animation: spinw .7s infinite linear;
+    -moz-animation: spinm .7s infinite linear;
+}
+
+@keyframes spin {
+    from { transform: scale(1) rotate(0deg);}
+    to { transform: scale(1) rotate(360deg);}
+}
+  
+@-webkit-keyframes spinw {
+    from { -webkit-transform: rotate(0deg);}
+    to { -webkit-transform: rotate(360deg);}  
+}
+ 
+@-moz-keyframes spinm {
+    from { -moz-transform: rotate(0deg);}
+    to { -moz-transform: rotate(360deg);}
+}
+</style>
+
+<style>
+
+@media (max-width: 767px) {
+    .portfolio>.clear:nth-child(6n)::before {
+      content: '';
+      display: table;
+      clear: both;
+    }
+}
+@media (min-width: 768px) and (max-width: 1199px) {
+    .portfolio>.clear:nth-child(8n)::before {
+      content: '';
+      display: table;
+      clear: both;
+    }
+}
+@media (min-width: 1200px) {
+    .portfolio>.clear:nth-child(12n)::before {  
+      content: '';
+      display: table;
+      clear: both;
+    }
+}
+#wrapper {
+    width: 100%;     
+}
+#page-wrapper {  
+    position: inherit;
+    padding: 0 30px;
+}
+#page-wrapper {
+    padding: 0 15px;
+    min-height: 568px;
+    background-color: white;
+}
+</style>
+<div id="HomePage">
+	<div class="container-fluid">
+		<img class="img-responsive" src="/andromeda/images/Banner.png" alt="No image found">
+	<nav class="navbar navbar-default" id="navbarid" style="margin-top: -0.5%; background-color: rgba(36, 94, 231, 0.6); color: #ffffff">
+			<div class="container-fluid">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle" data-toggle="collapse"
+						data-target="#navDiv">
+						<span class="icon-bar"></span> <span class="icon-bar"></span> <span
+							class="icon-bar"></span>
+					</button>
+					<a class="navbar-brand" style="color: #ffffff;">UNIFIED REPORTS</a>  
+				</div>  
+				<div class="collapse navbar-collapse" id="navDiv">
+					<ul class="nav navbar-nav">
+						<li class="active" onclick="Andromeda.showLoginPage();"  style="color: #ffffff;"><a>Home</a></li>  
+						
+						
+						
+					</ul>      
+					
+					 <ul class="nav navbar-nav pull-right">
+						
+						<li><a onclick="Andromeda.showLoginPage();"  style="color: #ffffff;">Login</a></li>
+					</ul> 
+				</div>
+			</div>
+		</nav>      
+	</div>
+	<!-- Load content here  -->
+	<div class="row portfolio">
+	 <div id="wrapper">
+        <div id="page-wrapper"> 
+	<div id="replaceDiv"></div>    
+	</div>
+	</div>
+	</div>
+	
+	<!-- End here -->
+	<footer class="footer">
+		<div class="col-md-3 pull-right" id="copyRightId">
+			Designed &amp; Developed by <a href="http://engineering.apssdc.in/" target="_blank" style="text-decoration: none;">APSSDC</a>
+		</div>
+	</footer>
+</div>   
+<script type="text/javascript">
+	jQuery(document).ready(function() {
+		//Andromeda.showSlidePage(); 
+		/* Andromeda.showProcedure(); */
+/* 		Andromeda.showJobPageMain();
+ */		
+	});
+</script>

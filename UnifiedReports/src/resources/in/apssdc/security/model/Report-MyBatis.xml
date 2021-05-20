@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Report">
+
+		<select id="getDistrictSchemesReport" resultType="map">  
+
+select it.district_id,dt.value as districtname,ay.year,ip.scheme_id,se.value as schemename,ip.program_id,pc.name as programname,count(ca.candidate_info_id) from candidate_application ca inner join traning_batch tb on (ca.batch_id=tb.id)
+inner join institute_program_map ip on (tb.institute_program_map_id=ip.id) left JOIN (select generate_series(start_date,end_date,interval '1 Day')::date as start_date,year from acadamic_year) ay on (ay.start_date=tb.enddate) inner join dropdown_settings se on (se.id=ip.scheme_id) inner join institute it on (ip.type_id=it.id) inner join program_course pc on (ip.program_id=pc.id) 
+inner join dropdown_settings dt on (it.district_id=dt.id)
+where application_type in ('TC_JOB','TC_BATCH') and ip.type='TRAINING_CENTER' and is_placed=1 group by it.district_id,dt.value,ay.year,ip.scheme_id,se.value,ip.program_id,pc.name	  
+	</select>  
+	
+	<select id="getDistrictSchemewiseData" parameterType="map" resultType="map"> 
+select distinct  ay.year,d.district as districtid,j.value as  districtname,q.id as schemeid,q.value as schemename,d.aadharnumber,d.firstname,d.lastname,d.dob::date,date_part('year',age(dob)) as ageasondate,d.gender,d.maritalstatus,h.value as religion,d.caste_id as categoryid,f.value as category,d.fmly_annual_income,g.email,g.contact,d.alternatecontact,(case when d.isrural='true' then 'Rural' else 'Urban' end) urbanorrural,d.state,i.value as statename,d.constitition,k.value as Constituency,l.value as Municipality,d.addressline,d.ward,d.street,d.pincode,r.qualification as QUALIFICATION,e.id as tcid,(case when a.application_type='TC_BATCH' then e.name when a.application_type='COLLEGE_BATCH' then s.collage_name end) as tcname,e.training_parner_id as tpid,(case when a.application_type='TC_BATCH' then o.name else '-'  end) as tpname,c.program_id,p.name programname,b.startdate,b.enddate,b.name as batchname, org.name
+from candidate_application a inner join traning_batch b on (a.batch_id=b.id) left join institute_program_map c on (b.institute_program_map_id=c.id) left join candidate_info d on (a.candidate_info_id=d.id) left join (select id,district_id,name,'TC_BATCH' as type,training_parner_id from institute union select  id,district_id,collage_name,'COLLEGE_BATCH' as type,null as training_parner_id  from collage) e on (a.application_type=e.type and c.type_id=e.id) left join (select * from dropdown_settings where key='CATEGORY') f on (d.caste_id=f.id) left join public.user_master g on (d.user_master_id=g.id) left join (select * from dropdown_settings where key='RELIGION') h on (d.religion=h.id) left join (select * from dropdown_settings where key='STATE') i on (d.state=i.id) left join (select * from dropdown_settings where key='DISTRICT') j on (d.district=j.id) left join (select * from dropdown_settings where key='CONSTITUTION') k on (d.constitition=k.id) left join (select * from dropdown_settings where key='MUNICIPALITY') l on (d.mndl_munc=l.id) left join training_partner o on (e.training_parner_id=o.id)
+left join program_course p on (c.program_id=p.id) left join dropdown_settings q on (p.scheme_id= q.id) left join (select a.candidate_info_id,string_agg(a.value::text, ',') as qualification from  (select a.candidate_info_id,b.value from canditate_education a inner join dropdown_settings b on (a.qualification=b.id) order by a.candidate_info_id,b.value) a group by a.candidate_info_id) r on (a.candidate_info_id=r.candidate_info_id) left join (select generate_series(start_date,end_date,interval '1 Day')::date as start_date,year from acadamic_year) ay on (ay.start_date=b.enddate) left join collage s on (c.type_id=s.id) left join organization org on (a.application_type_id = org.id)
+where a.application_type in ('TC_BATCH','TC_JOB') and a.is_placed=1 and q.id=#{p.scheme_id} and d.district=#{p.district_id} and c.program_id=#{p.program_id} and ay.year=#{p.year}
+
+</select>
+
+<select id="getDistrictSchemesTCTPReport" resultType="map">  
+
+select it.district_id,dt.value as districtname,ay.year,ip.scheme_id,se.value as schemename,ip.program_id,pc.name as programname,it.training_parner_id as tpid,tp.name as tpname,ip.type_id as tcid,it.name as tcname, count(ca.candidate_info_id) from candidate_application ca inner join traning_batch tb on (ca.batch_id=tb.id)
+inner join institute_program_map ip on (tb.institute_program_map_id=ip.id) left JOIN (select generate_series(start_date,end_date,interval '1 Day')::date as start_date,year from acadamic_year) ay on (ay.start_date=tb.enddate) inner join dropdown_settings se on (se.id=ip.scheme_id) inner join institute it on (ip.type_id=it.id) inner join program_course pc on (ip.program_id=pc.id)
+inner join training_partner tp on (tp.id=it.training_parner_id)
+inner join dropdown_settings dt on (it.district_id=dt.id)
+where application_type in ('TC_JOB','TC_BATCH') and ip.type='TRAINING_CENTER' and is_placed=1 group by it.district_id,dt.value,ay.year,ip.scheme_id,se.value,ip.program_id,pc.name,it.training_parner_id,tp.name,ip.type_id,it.name
+</select>
+
+<select id="getDistrictSchemeTCTPwiseData" parameterType="map" resultType="map"> 
+select distinct  ay.year,d.district as districtid,j.value as  districtname,q.id as schemeid,q.value as schemename,d.aadharnumber,d.firstname,d.lastname,d.dob::date,date_part('year',age(dob)) as ageasondate,d.gender,d.maritalstatus,h.value as religion,d.caste_id as categoryid,f.value as category,d.fmly_annual_income,g.email,g.contact,d.alternatecontact,(case when d.isrural='true' then 'Rural' else 'Urban' end) urbanorrural,d.state,i.value as statename,d.constitition,k.value as Constituency,l.value as Municipality,d.addressline,d.ward,d.street,d.pincode,r.qualification as QUALIFICATION,e.id as tcid,(case when a.application_type='TC_BATCH' then e.name when a.application_type='COLLEGE_BATCH' then s.collage_name end) as tcname,e.training_parner_id as tpid,(case when a.application_type='TC_BATCH' then o.name else '-'  end) as tpname,c.program_id,p.name programname,b.startdate,b.enddate,b.name as batchname, org.name
+from candidate_application a inner join traning_batch b on (a.batch_id=b.id) left join institute_program_map c on (b.institute_program_map_id=c.id) left join candidate_info d on (a.candidate_info_id=d.id) left join (select id,district_id,name,'TC_BATCH' as type,training_parner_id from institute union select  id,district_id,collage_name,'COLLEGE_BATCH' as type,null as training_parner_id  from collage) e on (a.application_type=e.type and c.type_id=e.id) left join (select * from dropdown_settings where key='CATEGORY') f on (d.caste_id=f.id) left join public.user_master g on (d.user_master_id=g.id) left join (select * from dropdown_settings where key='RELIGION') h on (d.religion=h.id) left join (select * from dropdown_settings where key='STATE') i on (d.state=i.id) left join (select * from dropdown_settings where key='DISTRICT') j on (d.district=j.id) left join (select * from dropdown_settings where key='CONSTITUTION') k on (d.constitition=k.id) left join (select * from dropdown_settings where key='MUNICIPALITY') l on (d.mndl_munc=l.id) left join training_partner o on (e.training_parner_id=o.id)
+left join program_course p on (c.program_id=p.id) left join dropdown_settings q on (p.scheme_id= q.id) left join (select a.candidate_info_id,string_agg(a.value::text, ',') as qualification from  (select a.candidate_info_id,b.value from canditate_education a inner join dropdown_settings b on (a.qualification=b.id) order by a.candidate_info_id,b.value) a group by a.candidate_info_id) r on (a.candidate_info_id=r.candidate_info_id) left join (select generate_series(start_date,end_date,interval '1 Day')::date as start_date,year from acadamic_year) ay on (ay.start_date=b.enddate) left join collage s on (c.type_id=s.id) left join organization org on (a.application_type_id = org.id)
+where a.application_type in ('TC_BATCH','TC_JOB') and a.is_placed=1 and q.id=#{p.scheme_id} and d.district=#{p.district_id} and c.program_id=#{p.program_id} and ay.year=#{p.year} and e.training_parner_id=#{p.tpid} and e.id=#{p.tcid}
+
+</select>
+
+<select id="getDistrictSchemesSectorReport" resultType="map">  
+
+select it.district_id,dt.value as districtname,ay.year,ip.scheme_id,se.value as schemename,ip.sector_id,sc.value as sectorname,ip.program_id,pc.name as programname,count(ca.candidate_info_id) from candidate_application ca inner join traning_batch tb on (ca.batch_id=tb.id)
+inner join institute_program_map ip on (tb.institute_program_map_id=ip.id) left JOIN (select generate_series(start_date,end_date,interval '1 Day')::date as start_date,year from acadamic_year) ay on (ay.start_date=tb.enddate) inner join dropdown_settings se on (se.id=ip.scheme_id) inner join institute it on (ip.type_id=it.id) inner join program_course pc on (ip.program_id=pc.id) 
+inner join dropdown_settings dt on (it.district_id=dt.id) inner join dropdown_settings sc on (sc.id=ip.sector_id)
+where application_type in ('TC_JOB','TC_BATCH') and ip.type='TRAINING_CENTER' and is_placed=1 group by it.district_id,dt.value,ay.year,ip.scheme_id,se.value,ip.sector_id,sc.value,ip.program_id,pc.name
+
+</select>
+
+<select id="getDistrictSchemeSectorwiseData" parameterType="map" resultType="map"> 
+select distinct  ay.year,d.district as districtid,j.value as  districtname,q.id as schemeid,q.value as schemename,d.aadharnumber,d.firstname,d.lastname,d.dob::date,date_part('year',age(dob)) as ageasondate,d.gender,d.maritalstatus,h.value as religion,d.caste_id as categoryid,f.value as category,d.fmly_annual_income,g.email,g.contact,d.alternatecontact,(case when d.isrural='true' then 'Rural' else 'Urban' end) urbanorrural,d.state,i.value as statename,d.constitition,k.value as Constituency,l.value as Municipality,d.addressline,d.ward,d.street,d.pincode,r.qualification as QUALIFICATION,e.id as tcid,(case when a.application_type='TC_BATCH' then e.name when a.application_type='COLLEGE_BATCH' then s.collage_name end) as tcname,e.training_parner_id as tpid,(case when a.application_type='TC_BATCH' then o.name else '-'  end) as tpname,c.program_id,p.name programname,b.startdate,b.enddate,b.name as batchname, org.name
+from candidate_application a inner join traning_batch b on (a.batch_id=b.id) left join institute_program_map c on (b.institute_program_map_id=c.id) left join candidate_info d on (a.candidate_info_id=d.id) left join (select id,district_id,name,'TC_BATCH' as type,training_parner_id from institute union select  id,district_id,collage_name,'COLLEGE_BATCH' as type,null as training_parner_id  from collage) e on (a.application_type=e.type and c.type_id=e.id) left join (select * from dropdown_settings where key='CATEGORY') f on (d.caste_id=f.id) left join public.user_master g on (d.user_master_id=g.id) left join (select * from dropdown_settings where key='RELIGION') h on (d.religion=h.id) left join (select * from dropdown_settings where key='STATE') i on (d.state=i.id) left join (select * from dropdown_settings where key='DISTRICT') j on (d.district=j.id) left join (select * from dropdown_settings where key='CONSTITUTION') k on (d.constitition=k.id) left join (select * from dropdown_settings where key='MUNICIPALITY') l on (d.mndl_munc=l.id) left join training_partner o on (e.training_parner_id=o.id)
+left join program_course p on (c.program_id=p.id) left join dropdown_settings q on (p.scheme_id= q.id) left join (select a.candidate_info_id,string_agg(a.value::text, ',') as qualification from  (select a.candidate_info_id,b.value from canditate_education a inner join dropdown_settings b on (a.qualification=b.id) order by a.candidate_info_id,b.value) a group by a.candidate_info_id) r on (a.candidate_info_id=r.candidate_info_id) left join (select generate_series(start_date,end_date,interval '1 Day')::date as start_date,year from acadamic_year) ay on (ay.start_date=b.enddate) left join collage s on (c.type_id=s.id) left join organization org on (a.application_type_id = org.id)
+where a.application_type in ('TC_BATCH','TC_JOB') and a.is_placed=1 and q.id=#{p.scheme_id} and d.district=#{p.district_id} and c.program_id=#{p.program_id} and ay.year=#{p.year} and c.sector_id=#{p.sector_id}
+
+</select>
+
+
+<select id="getDistrictSchemesGenderReport" resultType="map">  
+
+select it.district_id,dt.value as districtname,ay.year,ip.scheme_id,se.value as schemename,ip.program_id,pc.name as programname,ci.gender,count(ca.candidate_info_id) from candidate_application ca inner join traning_batch tb on (ca.batch_id=tb.id)
+inner join institute_program_map ip on (tb.institute_program_map_id=ip.id) left JOIN (select generate_series(start_date,end_date,interval '1 Day')::date as start_date,year from acadamic_year) ay on (ay.start_date=tb.enddate) inner join dropdown_settings se on (se.id=ip.scheme_id) inner join institute it on (ip.type_id=it.id) inner join program_course pc on (ip.program_id=pc.id) 
+inner join dropdown_settings dt on (it.district_id=dt.id) inner join candidate_info ci on (ca.candidate_info_id=ci.id)
+where application_type in ('TC_JOB','TC_BATCH') and ip.type='TRAINING_CENTER' and is_placed=1 group by it.district_id,dt.value,ay.year,ip.scheme_id,se.value,ip.program_id,pc.name,ci.gender
+</select>
+
+<select id="getDistrictSchemegenderwiseData" parameterType="map" resultType="map"> 
+select distinct  ay.year,d.district as districtid,j.value as  districtname,q.id as schemeid,q.value as schemename,d.aadharnumber,d.firstname,d.lastname,d.dob::date,date_part('year',age(dob)) as ageasondate,d.gender,d.maritalstatus,h.value as religion,d.caste_id as categoryid,f.value as category,d.fmly_annual_income,g.email,g.contact,d.alternatecontact,(case when d.isrural='true' then 'Rural' else 'Urban' end) urbanorrural,d.state,i.value as statename,d.constitition,k.value as Constituency,l.value as Municipality,d.addressline,d.ward,d.street,d.pincode,r.qualification as QUALIFICATION,e.id as tcid,(case when a.application_type='TC_BATCH' then e.name when a.application_type='COLLEGE_BATCH' then s.collage_name end) as tcname,e.training_parner_id as tpid,(case when a.application_type='TC_BATCH' then o.name else '-'  end) as tpname,c.program_id,p.name programname,b.startdate,b.enddate,b.name as batchname, org.name
+from candidate_application a inner join traning_batch b on (a.batch_id=b.id) left join institute_program_map c on (b.institute_program_map_id=c.id) left join candidate_info d on (a.candidate_info_id=d.id) left join (select id,district_id,name,'TC_BATCH' as type,training_parner_id from institute union select  id,district_id,collage_name,'COLLEGE_BATCH' as type,null as training_parner_id  from collage) e on (a.application_type=e.type and c.type_id=e.id) left join (select * from dropdown_settings where key='CATEGORY') f on (d.caste_id=f.id) left join public.user_master g on (d.user_master_id=g.id) left join (select * from dropdown_settings where key='RELIGION') h on (d.religion=h.id) left join (select * from dropdown_settings where key='STATE') i on (d.state=i.id) left join (select * from dropdown_settings where key='DISTRICT') j on (d.district=j.id) left join (select * from dropdown_settings where key='CONSTITUTION') k on (d.constitition=k.id) left join (select * from dropdown_settings where key='MUNICIPALITY') l on (d.mndl_munc=l.id) left join training_partner o on (e.training_parner_id=o.id)
+left join program_course p on (c.program_id=p.id) left join dropdown_settings q on (p.scheme_id= q.id) left join (select a.candidate_info_id,string_agg(a.value::text, ',') as qualification from  (select a.candidate_info_id,b.value from canditate_education a inner join dropdown_settings b on (a.qualification=b.id) order by a.candidate_info_id,b.value) a group by a.candidate_info_id) r on (a.candidate_info_id=r.candidate_info_id) left join (select generate_series(start_date,end_date,interval '1 Day')::date as start_date,year from acadamic_year) ay on (ay.start_date=b.enddate) left join collage s on (c.type_id=s.id) left join organization org on (a.application_type_id = org.id)
+where a.application_type in ('TC_BATCH','TC_JOB') and a.is_placed=1 and q.id=#{p.scheme_id} and d.district=#{p.district_id} and c.program_id=#{p.program_id} and ay.year=#{p.year} and d.gender=#{p.gender}
+
+</select>
+
+
+
+<select id="getDistrictSchemesGenderCategoryReport" resultType="map">  
+
+select it.district_id,dt.value as districtname,ay.year,ip.scheme_id,se.value as schemename,ip.program_id,pc.name as programname,ci.gender,ci.caste_id,cat.value as category,count(ca.candidate_info_id) from candidate_application ca inner join traning_batch tb on (ca.batch_id=tb.id)
+inner join institute_program_map ip on (tb.institute_program_map_id=ip.id) left JOIN (select generate_series(start_date,end_date,interval '1 Day')::date as start_date,year from acadamic_year) ay on (ay.start_date=tb.enddate) inner join dropdown_settings se on (se.id=ip.scheme_id) inner join institute it on (ip.type_id=it.id) inner join program_course pc on (ip.program_id=pc.id) 
+inner join dropdown_settings dt on (it.district_id=dt.id) inner join candidate_info ci on (ca.candidate_info_id=ci.id) left join dropdown_settings cat on (ci.caste_id=cat.id)
+where application_type in ('TC_JOB','TC_BATCH') and ip.type='TRAINING_CENTER' and is_placed=1 group by it.district_id,dt.value,ay.year,ip.scheme_id,se.value,ip.program_id,pc.name,ci.gender,ci.gender,ci.caste_id,cat.value
+
+</select>
+
+<select id="getDistrictSchemegendercategorywiseData" parameterType="map" resultType="map"> 
+select distinct  ay.year,d.district as districtid,j.value as  districtname,q.id as schemeid,q.value as schemename,d.aadharnumber,d.firstname,d.lastname,d.dob::date,date_part('year',age(dob)) as ageasondate,d.gender,d.maritalstatus,h.value as religion,d.caste_id as categoryid,f.value as category,d.fmly_annual_income,g.email,g.contact,d.alternatecontact,(case when d.isrural='true' then 'Rural' else 'Urban' end) urbanorrural,d.state,i.value as statename,d.constitition,k.value as Constituency,l.value as Municipality,d.addressline,d.ward,d.street,d.pincode,r.qualification as QUALIFICATION,e.id as tcid,(case when a.application_type='TC_BATCH' then e.name when a.application_type='COLLEGE_BATCH' then s.collage_name end) as tcname,e.training_parner_id as tpid,(case when a.application_type='TC_BATCH' then o.name else '-'  end) as tpname,c.program_id,p.name programname,b.startdate,b.enddate,b.name as batchname, org.name
+from candidate_application a inner join traning_batch b on (a.batch_id=b.id) left join institute_program_map c on (b.institute_program_map_id=c.id) left join candidate_info d on (a.candidate_info_id=d.id) left join (select id,district_id,name,'TC_BATCH' as type,training_parner_id from institute union select  id,district_id,collage_name,'COLLEGE_BATCH' as type,null as training_parner_id  from collage) e on (a.application_type=e.type and c.type_id=e.id) left join (select * from dropdown_settings where key='CATEGORY') f on (d.caste_id=f.id) left join public.user_master g on (d.user_master_id=g.id) left join (select * from dropdown_settings where key='RELIGION') h on (d.religion=h.id) left join (select * from dropdown_settings where key='STATE') i on (d.state=i.id) left join (select * from dropdown_settings where key='DISTRICT') j on (d.district=j.id) left join (select * from dropdown_settings where key='CONSTITUTION') k on (d.constitition=k.id) left join (select * from dropdown_settings where key='MUNICIPALITY') l on (d.mndl_munc=l.id) left join training_partner o on (e.training_parner_id=o.id)
+left join program_course p on (c.program_id=p.id) left join dropdown_settings q on (p.scheme_id= q.id) left join (select a.candidate_info_id,string_agg(a.value::text, ',') as qualification from  (select a.candidate_info_id,b.value from canditate_education a inner join dropdown_settings b on (a.qualification=b.id) order by a.candidate_info_id,b.value) a group by a.candidate_info_id) r on (a.candidate_info_id=r.candidate_info_id) left join (select generate_series(start_date,end_date,interval '1 Day')::date as start_date,year from acadamic_year) ay on (ay.start_date=b.enddate) left join collage s on (c.type_id=s.id) left join organization org on (a.application_type_id = org.id)
+where a.application_type in ('TC_BATCH','TC_JOB') and a.is_placed=1 and q.id=#{p.scheme_id} and d.district=#{p.district_id} and c.program_id=#{p.program_id} and ay.year=#{p.year} and d.gender=#{p.gender} and d.caste_id=#{p.categoryid}
+
+</select>
+
+
+<select id="getDegreeCollegeWiseReport" resultType="map">  
+select it.district_id,dt.value as districtname,ay.year,ip.type_id collegeid,it.collage_name,ip.program_id,pc.name programname,count(candidate_info_id) from manager_mapping mm inner join candidate_application ca on (mm.typeid=ca.candidate_info_id) 
+inner join traning_batch tb on (ca.batch_id=tb.id) 
+inner join institute_program_map ip on (tb.institute_program_map_id=ip.id)
+inner join collage it on (ip.type_id=it.id)
+inner join program_course pc on (ip.program_id=pc.id)
+inner join dropdown_settings dt on (it.district_id=dt.id)
+inner join (select generate_series(start_date,end_date,interval '1 Day')::date as start_date,year from acadamic_year) ay on (ay.start_date=tb.enddate) 
+where ca.is_placed=1 and mm.type='ACADEMIC_CANDIDATE' and ip.type='COLLEGE' group by it.district_id,dt.value,ay.year,ip.type_id,it.collage_name,ip.program_id,pc.name
+
+</select>
+
+<select id="getDegreeCollegewisePlacedData" parameterType="map" resultType="map"> 
+select distinct  ay.year,d.district as districtid,j.value as  districtname,q.id as schemeid,q.value as schemename,d.aadharnumber,d.firstname,d.lastname,d.dob::date,date_part('year',age(dob)) as ageasondate,d.gender,d.maritalstatus,h.value as religion,d.caste_id as categoryid,f.value as category,d.fmly_annual_income,g.email,g.contact,d.alternatecontact,(case when d.isrural='true' then 'Rural' else 'Urban' end) urbanorrural,d.state,i.value as statename,d.constitition,k.value as Constituency,l.value as Municipality,d.addressline,d.ward,d.street,d.pincode,r.qualification as QUALIFICATION,e.id as tcid,(case when a.application_type='TC_BATCH' then e.name when a.application_type='COLLEGE_BATCH' then s.collage_name end) as tcname,e.training_parner_id as tpid,(case when a.application_type='TC_BATCH' then o.name else '-'  end) as tpname,c.program_id,p.name programname,b.startdate,b.enddate,b.name as batchname, org.name
+from candidate_application a inner join traning_batch b on (a.batch_id=b.id) left join institute_program_map c on (b.institute_program_map_id=c.id) left join candidate_info d on (a.candidate_info_id=d.id) left join (select id,district_id,name,'TC_BATCH' as type,training_parner_id from institute union select  id,district_id,collage_name,'COLLEGE_BATCH' as type,null as training_parner_id  from collage) e on (a.application_type=e.type and c.type_id=e.id) left join (select * from dropdown_settings where key='CATEGORY') f on (d.caste_id=f.id) left join public.user_master g on (d.user_master_id=g.id) left join (select * from dropdown_settings where key='RELIGION') h on (d.religion=h.id) left join (select * from dropdown_settings where key='STATE') i on (d.state=i.id) left join (select * from dropdown_settings where key='DISTRICT') j on (d.district=j.id) left join (select * from dropdown_settings where key='CONSTITUTION') k on (d.constitition=k.id) left join (select * from dropdown_settings where key='MUNICIPALITY') l on (d.mndl_munc=l.id) left join training_partner o on (e.training_parner_id=o.id)
+left join program_course p on (c.program_id=p.id) left join dropdown_settings q on (p.scheme_id= q.id) left join (select a.candidate_info_id,string_agg(a.value::text, ',') as qualification from  (select a.candidate_info_id,b.value from canditate_education a inner join dropdown_settings b on (a.qualification=b.id) order by a.candidate_info_id,b.value) a group by a.candidate_info_id) r on (a.candidate_info_id=r.candidate_info_id) left join (select generate_series(start_date,end_date,interval '1 Day')::date as start_date,year from acadamic_year) ay on (ay.start_date=b.enddate) left join collage s on (c.type_id=s.id) left join organization org on (a.application_type_id = org.id)
+where a.application_type in ('TC_BATCH','TC_JOB') and d.district=#{p.district_id} and c.program_id=#{p.program_id} and ay.year=#{p.year} and c.type_id=#{p.college_id}
+
+</select>
+
+<select id="showDateswiseApplicants" parameterType="map" resultType="map">               
+	
+	select distinct aadhaar,CONCAT(fname,' ',lname) as name,trainingstatus,phone,studentemail,ageconf,qualification from public.placemnets_sub where jobid = #{p.jobid}
+    and logtime::date = #{p.dateSearch}::date
+      	    
+	</select>    
+	
+	<select id="getJobApplicants" resultType="map">    
+	select a.jobid as id,a.organization as company,coalesce(b.applicants, 0) applicants from public.jobs a 
+	inner join
+	(select jobid,count(*) as applicants from public.placemnets_sub group by jobid) b on
+	a.jobid = b.jobid order by id desc
+	</select>
+	
+	  
+	<select id="getApplicantDetails" parameterType="java.lang.String" resultType="map">
+	  
+	     
+	select distinct aadhaar,CONCAT(fname,' ',lname) as name,trainingstatus,logtime::date as Date,logtime::time as Time,phone,studentemail,ageconf,qualification,trainingstatus,gender from public.placemnets_sub where jobid=#{id}
+	</select>
+	
+	<select id="getPlacedCompanies" resultType="map">  
+	select count(*),company,dateofselection,jobid from public.placed_data where jobid in (select distinct jobid from public.placed_data) group by company,dateofselection,jobid order by dateofselection desc
+	  
+	</select>                 
+	         	           
+	       
+	<select id="getAdminPlacedCompanies" resultType="map">  
+		select count(*),company,jobid from public.placed_data where jobid in (select distinct jobid from public.placed_data) group by company,jobid order by jobid desc	  
+	</select>    
+	  
+	<select id="getPlacedDetails" parameterType="java.lang.Integer" resultType="map">        
+	
+	select * from public.placed_data where jobid=#{jobid} order by dateofselection
+	</select>   
+</mapper>

@@ -1,0 +1,106 @@
+<script src="/unifiedReports/scripts/general/formModule.js"></script>
+
+<style type="text/css">
+#formControllerDiv {
+	margin-left: 25%;
+	height: 360px;
+	margin-bottom: 1%;   
+	border-radius: 10px;
+	margin-top: 1%;
+	width: 42%;
+}   
+
+#loginBtn {
+	margin-left: 35%;   
+}   
+
+#loginImg {
+	margin-left: 30%;
+}
+
+.loginCredentialsDiv {
+	margin-left: 20%;
+	margin-top: 15px;
+	width: 60%;
+}
+
+@media only screen and (max-width: 900px) {
+	#formControllerDiv {
+		margin-left: 0%;
+		width: 100%;
+	}
+	#loginBtn {
+		margin-left: 9%;
+	}
+	#loginImg {
+		margin-left: 20%;
+	}
+	.loginCredentialsDiv {
+		margin-left: 5%;
+		width: 100%;
+	}
+}
+</style>   
+<div class="panel panel-primary" id="formControllerDiv"   
+	data-ng-controller="formController">
+	<div class="panel-heading">
+		<label id="panelHeader"><font color="white">Login</font></label>
+	</div>
+	<div class="panel-body" style="margin-left: 10%; margin-right: 10%">
+		<form id="loginForm">
+			<div>
+				<img class="profile-img" src="/andromeda/images/login/loginImg.jpg"
+					alt="No image found" id="loginImg">
+				<div class="form-group row input-group loginCredentialsDiv" style="">
+					<span class="input-group-addon"><li
+						class="glyphicon glyphicon-user"></li></span><input type="text"
+						class="form-control" id="username" placeholder="Enter username"
+						data-ng-model="data.object.username">
+				</div>
+				<div class="form-group row input-group loginCredentialsDiv">
+					<span class="input-group-addon"><li
+						class="glyphicon glyphicon-lock"></li></span><input type="password"
+						class="form-control" placeholder="Enter password"
+						data-ng-model="data.object.password">
+				</div>
+				<button type="button" class="btn btn-success" id="loginBtn"
+					data-ng-click="login(data.object);">Sign in</button>
+				
+			</div>
+		</form>
+	</div>
+
+	<div id="myModal" class="modal fade" role="dialog">   
+		<div class="modal-dialog">
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">Forgot password</h4>
+				</div>
+				<div class="modal-body">
+					Enter username: <input placeholder="xxxxxx@gmail.com"
+						data-ng-model="email" required="required"
+						pattern="^[A-Za-z0-9.$]*[@][a-z]{3,8}.(com|gov|org|office|co.in|edu|in)"
+						class="form-control" />
+				</div>
+				<div class="modal-footer">
+					<button id="submit" type="button" class="btn btn-primary"
+						data-ng-click="forgotPassword(email);">Submit</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+     
+
+<script>
+	jQuery(document).ready(function() {
+		$("#errorDiv").hide();
+		angular.bootstrap(jQuery("#formControllerDiv"), [ 'formModule' ]);
+	});
+	jQuery("#submit").click(function() {
+		jQuery("#spinner").addClass("glyphicon glyphicon-refresh glyphicon-refresh-animate");
+	});
+</script>
