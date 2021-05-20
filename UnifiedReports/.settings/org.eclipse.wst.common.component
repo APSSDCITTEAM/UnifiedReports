@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
-    <wb-module deploy-name="SiemensCareersSub">
+    <wb-module deploy-name="UnifiedReports">
         <wb-resource deploy-path="/" source-path="/web" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/java"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/config"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/resources"/>
-        <property name="java-output-path" value="/SiemensCareersSub/web/WEB-INF/classes"/>
-        <property name="context-root" value="SiemensCareersSub"/>
+        <property name="java-output-path" value="/UnifiedReports/web/WEB-INF/classes"/>
+        <property name="context-root" value="UnifiedReports"/>
     </wb-module>
 </project-modules>
